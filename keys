@@ -1,0 +1,135 @@
+API Key Created
+Access Key (Username)
+641986770A66FBE086C0 
+Secret Key (Password)
+XgaU863NxKNn3uTmAVCCZjjqryVM9wHFUBFuY1hf 
+
+
+srikanth.nutigattu@SGPC115 MINGW64 /d/projects/rancher_demo
+$ export RANCHER_URL=http://192.168.104.31:8080
+
+srikanth.nutigattu@SGPC115 MINGW64 /d/projects/rancher_demo
+$ export RANCHER_ACCESS_KEY=641986770A66FBE086C0
+
+srikanth.nutigattu@SGPC115 MINGW64 /d/projects/rancher_demo
+$ export RANCHER_SECRET_KEY=XgaU863NxKNn3uTmAVCCZjjqryVM9wHFUBFuY1hf
+
+
+
+---------------------------------
+
+sudo docker run -d --restart=always -p 8080:8080 rancher/server
+#tail the logs
+sudo docker logs -f containerid
+
+
+________________________________
+
+installing docker inside the vm
+https://pods.iplantcollaborative.org/wiki/display/HDFDE/Installing+VirtualBox,+Ubuntu,+and+Docker
+
+commands
+
+Steps if app server/entry point fails due to port restrictions
+need to Stop -> upgrade -> update port eg: from 80 to 8888 -> finish upgrade -> start
+
+
+Adding hosts in Rancher
+
+update the ipaddress on the WebUI in add hosts screen. If using locally on docker-machine use docker machine-ip. 
+copy the command from rancher Ui to run docker-agent on host....
+Run the command on Host machine.
+[you can add the same host where the rancher is running as well]
+
+build docker image:
+sudo docker build --no-cache=true -t sri/grails-petclinic .
+
+adding shared data volume between docker containers during run
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+docker run -d -P --name web -v /webapp training/webapp python app.py
+[docker - command
+run - run instruction
+-d - dameon mode
+-P - map all ports
+--name web - name the container for reference
+-v - mount the volume   [mount location]
+training/webapp- image name
+python aap.py - command to execute inside the container]
+
+
+adding host data folder as volume to a docker container
+
+$ docker run -d -P --name web -v /$(pwd)/grails-petclinic:/grails-petclinic training/webapp python app.py
+
+[-v /$(pwd)/src/webapp:/opt/webapp   --    [host folder:destination folder as volume]]
+
+$ docker run -v /$(pwd)/grails-petclinic:/grails-petclinic/ -it sri/grails-petc
+linic bash
+
+
+BUILD IMAGE
+~~~~~~~~~~~
+sudo docker build --no-cache=true -t dmalone/grails-petclinic .
+eg: docker build -t sri/grails-petclinic .
+
+RUN IMAGE
+~~~~~~~~
+on windows/docker machine, can mount only c:/users by default
+$ docker run -v //c/Users/srikanth.nutigattu/test/grails-petclinic:/grails-petclinic -it sri/grails-petclinic bash
+
+
+
+
+
+
+
+
+
+
+
+
+docker inspect   <id>/<name>
+~~~~~~~~~~~~~~ 
+to view the configuration of a running container
+
+
+
+
+VirtualBox Guest Additions
+
+Alternatively, Boot2Docker includes the VirtualBox Guest Additions built in for the express purpose of using VirtualBox folder sharing.
+
+The first of the following share names that exists (if any) will be automatically mounted at the location specified:
+
+Users share at /Users
+/Users share at /Users
+c/Users share at /c/Users
+/c/Users share at /c/Users
+c:/Users share at /c/Users
+If some other path or share is desired, it can be mounted at run time by doing something like:
+
+$ mount -t vboxsf -o uid=1000,gid=50 your-other-share-name /some/mount/location
+It is also important to note that in the future, the plan is to have any share which is created in VirtualBox with the "automount" flag turned on be mounted during boot at the directory of the share name (ie, a share named home/jsmith would be automounted at /home/jsmith).
+
+In case it isn't already clear, the Linux host support here is currently hazy. You can share your /home or /home/jsmith directory as Users or one of the other supported automount locations listed above, but note that you will then need to manually convert your docker run -v /home/...:... bind-mount host paths accordingly (ie, docker run -v /Users/...:...). As noted in the previous paragraph however, this is likely to change in the future as soon as a more suitable/scalable solution is found and implemented.
+
+
+#############################################
+if mounting windows git checkout file to unix....
+
+either retain the unix line endings or
+use 
+dos2unix to convert
+
+apt-get install dos2unix
+dos2unix grailsw
+################################################
+
+
+commit chages to docker image
+
+Once you’ve completed those instructions you can disconnect, or detach, from the shell without exiting use the escape sequence Ctrl-p + Ctrl-q.
+
+Finally it’s time to commit our changes to a named image. This command converts the container 9c09acd48a25 to an image with the name fedora-base-with-git:
+
+docker commit 9c09acd48a25 fedora-base-with-git

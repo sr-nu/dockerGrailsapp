@@ -1,0 +1,12 @@
+db:
+  environment:
+    MYSQL_ROOT_PASSWORD: example
+  image: mariadb
+app:
+  ports:
+  - 9999:80/tcp
+  log_driver: ''
+  log_opt: {}
+  image: srik/app
+  links:
+  - db:mysql

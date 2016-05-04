@@ -1,0 +1,4 @@
+db:
+  scale: 1
+app:
+  scale: 1
