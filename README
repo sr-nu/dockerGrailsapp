@@ -1,10 +1,24 @@
+local rancher api key http://192.168.99.100:8080/
 API Key Created
+Access Key (Username)
+E471B2A871DDF4E35BBD 
+Secret Key (Password)
+aHniqYMc2tLaLUcDLifC9Kz8Pf787ySwpR1NxfcB
+
+
+
+Polaris rancher - http://192.168.104.31:8080/
+
+API Key Created  
 Access Key (Username)
 641986770A66FBE086C0 
 Secret Key (Password)
 XgaU863NxKNn3uTmAVCCZjjqryVM9wHFUBFuY1hf 
 
 
+
+publishing to RANCHER
+~~~~~~~~~~~~~~~~~~~~~~
 srikanth.nutigattu@SGPC115 MINGW64 /d/projects/rancher_demo
 $ export RANCHER_URL=http://192.168.104.31:8080
 
@@ -13,6 +27,11 @@ $ export RANCHER_ACCESS_KEY=641986770A66FBE086C0
 
 srikanth.nutigattu@SGPC115 MINGW64 /d/projects/rancher_demo
 $ export RANCHER_SECRET_KEY=XgaU863NxKNn3uTmAVCCZjjqryVM9wHFUBFuY1hf
+
+
+ rancher-compose --url http://server_ip:8080 --access-key <username_of_key> --secret-key <password_of_key> up
+
+
 
 
 
