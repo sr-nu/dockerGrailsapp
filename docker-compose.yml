@@ -1,6 +1,6 @@
 app:
   ports:
-  - 9999:80/tcp
+  - 9999:8080/tcp
   log_driver: ''
   log_opt: {}
   image: srik/app
