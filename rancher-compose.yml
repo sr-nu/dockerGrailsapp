@@ -1,2 +1,4 @@
 app:
   scale: 1
+db:
+  scale: 1

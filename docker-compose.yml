@@ -3,4 +3,14 @@ app:
   - 9999:8080/tcp
   log_driver: ''
   log_opt: {}
+  links:
+  - "db:mysql"
   image: srik/app
+db:
+  environment:
+    MYSQL_ROOT_PASSWORD: pass1
+  ports:
+  - 9998:3306/tcp
+  tty: true
+  image: mysql
+  stdin_open: true

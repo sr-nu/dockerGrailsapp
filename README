@@ -1,9 +1,9 @@
-local rancher api key http://192.168.99.100:8080/
+local rancher api key http://192.168.99.101:8080/
 API Key Created
 Access Key (Username)
-E471B2A871DDF4E35BBD 
+8CA7ADD035AE169580D5
 Secret Key (Password)
-aHniqYMc2tLaLUcDLifC9Kz8Pf787ySwpR1NxfcB
+K6msPB54pRKH3Hm4XK6K7MAmkvxgXEpJxwk6dLPg
 
 
 
@@ -29,18 +29,25 @@ srikanth.nutigattu@SGPC115 MINGW64 /d/projects/rancher_demo
 $ export RANCHER_SECRET_KEY=XgaU863NxKNn3uTmAVCCZjjqryVM9wHFUBFuY1hf
 
 
- rancher-compose --url http://server_ip:8080 --access-key <username_of_key> --secret-key <password_of_key> up
-
-
+ ./rancher-compose --url http://192.168.99.101:8080 --access-key 8CA7ADD035AE169580D5 --secret-key K6msPB54pRKH3Hm4XK6K7MAmkvxgXEpJxwk6dLPg up
 
 
 
 ---------------------------------
 
+starting a rancher server agent locally:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 sudo docker run -d --restart=always -p 8080:8080 rancher/server
 #tail the logs
 sudo docker logs -f containerid
 
+
+starting a rancher Host machine locally
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. on rancher web UI go to Infra > hosts > add host.
+2. update the ip address to current "docker-machine ip" address
+3. copy the docker host script and execute in docker quickstart terminal
 
 ________________________________
 
@@ -61,7 +68,7 @@ Run the command on Host machine.
 [you can add the same host where the rancher is running as well]
 
 build docker image:
-sudo docker build --no-cache=true -t sri/grails-petclinic .
+sudo docker build --no-cache=true -t srik/grails-petclinic .
 
 adding shared data volume between docker containers during run
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -78,31 +85,41 @@ python aap.py - command to execute inside the container]
 
 adding host data folder as volume to a docker container
 
-$ docker run -d -P --name web -v /$(pwd)/grails-petclinic:/grails-petclinic training/webapp python app.py
+$ docker run -d -P --name web -v /$(pwd)/host-folder:/docker-folder training/webapp python app.py
 
 [-v /$(pwd)/src/webapp:/opt/webapp   --    [host folder:destination folder as volume]]
 
-$ docker run -v /$(pwd)/grails-petclinic:/grails-petclinic/ -it sri/grails-petc
-linic bash
+$ docker run -v /$(pwd)/grails-petclinic:/grails-petclinic/ -it srik/grails-petclinic bash
 
+or
+
+docker run -v /$(pwd)/grails-petclinic:/grails-petclinic/ -v /root -it srik/grails-petclinic bash
 
 BUILD IMAGE
 ~~~~~~~~~~~
 sudo docker build --no-cache=true -t dmalone/grails-petclinic .
-eg: docker build -t sri/grails-petclinic .
+eg: docker build -t srik/grails-petclinic .
 
 RUN IMAGE
 ~~~~~~~~
 on windows/docker machine, can mount only c:/users by default
-$ docker run -v //c/Users/srikanth.nutigattu/test/grails-petclinic:/grails-petclinic -it sri/grails-petclinic bash
+$ docker run -v //c/Users/srikanth.nutigattu/test/grails-petclinic:/grails-petclinic -it srik/grails-petclinic bash
+
+on mac
+docker run -v /$(pwd)/grails-petclinic:/grails-petclinic -it srik/grails-petclinic bash
 
 
 
 
 
+docker machine
+~~~~~~~~~~~~~~
+create docker machine
+docker-machine create -d virtualbox default
+docker-machine create -d virtualbox --virtualbox-memory 4096 default
 
-
-
+delete docker machine
+docker-machine rm default
 
 
 
@@ -113,7 +130,8 @@ to view the configuration of a running container
 
 
 
-
+ON WINDOWS
+~~~~~~~~~~
 VirtualBox Guest Additions
 
 Alternatively, Boot2Docker includes the VirtualBox Guest Additions built in for the express purpose of using VirtualBox folder sharing.
