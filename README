@@ -29,7 +29,7 @@ srikanth.nutigattu@SGPC115 MINGW64 /d/projects/rancher_demo
 $ export RANCHER_SECRET_KEY=XgaU863NxKNn3uTmAVCCZjjqryVM9wHFUBFuY1hf
 
 
- ./rancher-compose --url http://192.168.99.101:8080 --access-key 8CA7ADD035AE169580D5 --secret-key K6msPB54pRKH3Hm4XK6K7MAmkvxgXEpJxwk6dLPg up
+ ./rancher-compose --url http://192.168.99.102:8080 --access-key AE0E8DC8EF493A9B546E --secret-key 4T2nQpeo7JEqY3pLTk7aRg9dEbnQDB99iHv26jHG up
 
 
 
