@@ -1,3 +1,40 @@
+local dev environment
+
+
+
+Host machine (svn checkout + ide) -> shared volumes(mount code + /root/.grails for grails wrapper) -> docker (build+runtime deps)
+
+       	|
+       	v
+
+commit code + Dockerfiles for images + docker-compose.yml + rancher-compose.yml   to Repo
+
+	   	|
+	   	v
+
+CI (build pipeline) builds war file and publishes (archives locally or to remote)
+
+		|
+		V	   		
+
+CI (update image to docker registry) OR Registy pulls and autobuilds images like dockerhub
+[CI able to run docker build, docker push for building image]
+
+		|
+		V
+
+CI (publish to Rancher)
+CI executes rancher-compose to deploy updated images to rancher
+
+
+
+
+
+[optionally: vagrant -> ubuntu (svn checkout + code + build deps)]
+
+
+
+
 local rancher api key http://192.168.99.101:8080/
 API Key Created
 Access Key (Username)
@@ -170,3 +207,20 @@ Once you’ve completed those instructions you can disconnect, or detach, from t
 Finally it’s time to commit our changes to a named image. This command converts the container 9c09acd48a25 to an image with the name fedora-base-with-git:
 
 docker commit 9c09acd48a25 fedora-base-with-git
+
+
++++++++++++++++++++++++++++++++++++++++++++
+jenkins
+
+starting jenkins from local and mounting a local volume for workspace
+
+docker run -d  --name myjenkins -p 6060:8080 -p 50000:50000 -v $(pwd)/jenkins_home:/var/jenkins_home jenkins
+
+
+
+++++++++++++++++++++++++++++++++++++++++
+
+publishing images to docker hub
+
+docker login --username=srik --email=srikanth.nutigattu@gmail.com
+docker push srik/app
