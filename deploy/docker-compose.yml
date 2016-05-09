@@ -7,7 +7,7 @@ app:
   log_opt: {}
   links:
   - db
-  image: srik/app
+  image: srik/grails-petclinic
 db:
   environment:
     MYSQL_ROOT_PASSWORD: pass1
