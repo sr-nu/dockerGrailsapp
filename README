@@ -26,10 +26,7 @@ CI (update image to docker registry) OR Registy pulls and autobuilds images like
 CI (publish to Rancher)
 CI executes rancher-compose to deploy updated images to rancher
 
-
-
-
-
+local dev:
 [optionally: vagrant -> ubuntu (svn checkout + code + build deps)]
 
 
