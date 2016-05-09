@@ -1,8 +1,6 @@
 app:
   ports:
-  - 9999:8080/tcp
-  - 9998:8080/tcp
-  - 9997:8080/tcp
+  - 9090:8080/tcp
   log_driver: ''
   log_opt: {}
   links:
