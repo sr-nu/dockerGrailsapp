@@ -17,7 +17,6 @@ ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
 
 
 # doesn't work with volumes. as they can be only attached runtime.
-# RUN cp /grails-petclinic/target/*.war /usr/local/tomcat/webapps/
-# RUN cd /usr/local/tomcat/bin
+# RUN cp /grails-petclinic/target/*.war /usr/local/tomcat/webapps/ && cd /usr/local/tomcat/bin
 
 # CMD [“catalina.sh”, “run”]

@@ -135,11 +135,11 @@ $ docker run -v /$(pwd)/grails-petclinic:/grails-petclinic/ -it srik/grails-petc
 
 or
 
-docker run -v /$(pwd)/grails-petclinic:/grails-petclinic/ -v /root -it srik/grails-petclinic bash
+docker run -v /$(pwd)/grails-petclinic:/grails-petclinic/ -v /$(pwd)/grails-petclinic/.grails:/root/.grails/ -it srik/grails-petclinic bash
 
 BUILD IMAGE
 ~~~~~~~~~~~
-sudo docker build --no-cache=true -t dmalone/grails-petclinic .
+sudo docker build --no-cache=true -t srik/grails-petclinic .
 eg: docker build -t srik/grails-petclinic .
 
 RUN IMAGE
