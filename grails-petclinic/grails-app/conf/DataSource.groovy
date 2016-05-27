@@ -19,7 +19,7 @@ environments {
 	development {
 		dataSource {
 			dbCreate = 'create-drop' // one of 'create', 'create-drop', 'update', 'validate', ''
-            url = "jdbc:mysql//${env['DB_PORT_3306_TCP_ADDR']}:${env['DB_PORT_3306_TCP_PORT']}"
+            url = "jdbc:mysql//${env['DB_HOST']}:${env['DB_PORT']}"
             username = "admin"
             password = "pass1"
 		}
@@ -27,7 +27,7 @@ environments {
 	test {
 		dataSource {
 			dbCreate = 'create-drop'
-			url = "jdbc:mysql//${env['DB_PORT_3306_TCP_ADDR']}:${env['DB_PORT_3306_TCP_PORT']}"
+			url = "jdbc:mysql//${env['DB_HOST']}:${env['DB_PORT']}"
             username = "admin"
             password = "pass1"
 		}
@@ -35,7 +35,7 @@ environments {
 	production {
 		dataSource {
 			dbCreate = 'create-drop'
-			url = "jdbc:mysql//${env['DB_PORT_3306_TCP_ADDR']}:${env['DB_PORT_3306_TCP_PORT']}"
+			url = "jdbc:mysql//${env['DB_HOST']}:${env['DB_PORT']}"
             username = "admin"
             password = "pass1"
 		}
