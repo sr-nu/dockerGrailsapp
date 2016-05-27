@@ -2,15 +2,27 @@ app:
   ports:
   - 9090:8080/tcp
   log_driver: ''
+  restart: always
   log_opt: {}
+  depends_on:
+    - db
   links:
-  - db
+    - db
   image: srik/grails-petclinic
+  environment:
+    DB_HOST: db:3306
+    DB_PASSWORD: pass1
 db:
   environment:
     MYSQL_ROOT_PASSWORD: pass1
+    MYSQL_DATABASE: default
+    MYSQL_USER: admin
+    MYSQL_PASSWORD: pass1
+  restart: always
+  volumes:
+    ./.data/db:/var/lib/mysql
   ports:
   - 3306:3306/tcp
   tty: true
-  image: mysql
+  image: mysql:5.7
   stdin_open: true
