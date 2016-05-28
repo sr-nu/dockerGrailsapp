@@ -1,11 +1,9 @@
 app:
   ports:
-  - 9090:8080/tcp
+    - 9090:8080/tcp
   log_driver: ''
   restart: always
   log_opt: {}
-  depends_on:
-    - db
   links:
     - db
   image: srik/grails-petclinic
@@ -20,9 +18,9 @@ db:
     MYSQL_PASSWORD: pass1
   restart: always
   volumes:
-    ./.data/db:/var/lib/mysql
+    - ./.data/db:/var/lib/mysql
   ports:
-  - 3306:3306/tcp
+    - 3306:3306/tcp
   tty: true
   image: mysql:5.7
   stdin_open: true

@@ -1,8 +1,3 @@
-dataSource {
-	pooled = true
-    jmxExport = true
-	driverClassName = 'com.mysql.jdbc.Driver'
-}
 hibernate {
 	cache.use_second_level_cache = true
 	cache.use_query_cache = false
@@ -18,26 +13,41 @@ hibernate {
 environments {
 	development {
 		dataSource {
+			pooled = true
+			jmxExport = true
+			driverClassName = 'com.mysql.jdbc.Driver'
+			String host = System.getenv('DB_HOST')
+			String port = System.getenv('DB_PORT')
 			dbCreate = 'create-drop' // one of 'create', 'create-drop', 'update', 'validate', ''
-            url = "jdbc:mysql//${env['DB_HOST']}:${env['DB_PORT']}"
+			url = "jdbc:mysql//${host}:${port}"
             username = "admin"
             password = "pass1"
 		}
 	}
 	test {
 		dataSource {
-			dbCreate = 'create-drop'
-			url = "jdbc:mysql//${env['DB_HOST']}:${env['DB_PORT']}"
-            username = "admin"
-            password = "pass1"
+			pooled = true
+			jmxExport = true
+			driverClassName = 'com.mysql.jdbc.Driver'
+			String host = System.getenv('DB_HOST')
+			String port = System.getenv('DB_PORT')
+			dbCreate = 'create-drop' // one of 'create', 'create-drop', 'update', 'validate', ''
+			url = "jdbc:mysql//${host}:${port}"
+			username = "admin"
+			password = "pass1"
 		}
 	}
 	production {
 		dataSource {
-			dbCreate = 'create-drop'
-			url = "jdbc:mysql//${env['DB_HOST']}:${env['DB_PORT']}"
-            username = "admin"
-            password = "pass1"
+			pooled = true
+			jmxExport = true
+			driverClassName = 'com.mysql.jdbc.Driver'
+			String host = System.getenv('DB_HOST')
+			String port = System.getenv('DB_PORT')
+			dbCreate = 'create-drop' // one of 'create', 'create-drop', 'update', 'validate', ''
+			url = "jdbc:mysql//${host}:${port}"
+			username = "admin"
+			password = "pass1"
 		}
 	}
 }
