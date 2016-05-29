@@ -229,3 +229,12 @@ publishing images to docker hub
 
 docker login --username=srik --email=srikanth.nutigattu@gmail.com
 docker push srik/app
+
+
++++++++++++++++++++++++++++++++++++++++
+
+attaching bash to existing container
+
+$ sudo docker exec -i -t 665b4a1e17b6 /bin/bash #by ID
+or
+$ sudo docker exec -i -t loving_heisenberg /bin/bash #by Name

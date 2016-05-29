@@ -16,10 +16,10 @@ environments {
 			pooled = true
 			jmxExport = true
 			driverClassName = 'com.mysql.jdbc.Driver'
-			String host = System.getenv('DB_HOST')
-			String port = System.getenv('DB_PORT')
+			String host = System.getenv('DB_PORT_3306_TCP_ADDR')
+			String port = System.getenv('DB_PORT_3306_TCP_PORT')
 			dbCreate = 'create-drop' // one of 'create', 'create-drop', 'update', 'validate', ''
-			url = "jdbc:mysql//${host}:${port}"
+			url = "jdbc:mysql://${host}:${port}/default"
             username = "admin"
             password = "pass1"
 		}
@@ -29,10 +29,10 @@ environments {
 			pooled = true
 			jmxExport = true
 			driverClassName = 'com.mysql.jdbc.Driver'
-			String host = System.getenv('DB_HOST')
-			String port = System.getenv('DB_PORT')
+			String host = System.getenv('DB_PORT_3306_TCP_ADDR')
+			String port = System.getenv('DB_PORT_3306_TCP_PORT')
 			dbCreate = 'create-drop' // one of 'create', 'create-drop', 'update', 'validate', ''
-			url = "jdbc:mysql//${host}:${port}"
+			url = "jdbc:mysql://${host}:${port}/default"
 			username = "admin"
 			password = "pass1"
 		}
@@ -42,10 +42,10 @@ environments {
 			pooled = true
 			jmxExport = true
 			driverClassName = 'com.mysql.jdbc.Driver'
-			String host = System.getenv('DB_HOST')
-			String port = System.getenv('DB_PORT')
+			String host = System.getenv('DB_PORT_3306_TCP_ADDR')
+			String port = System.getenv('DB_PORT_3306_TCP_PORT')
 			dbCreate = 'create-drop' // one of 'create', 'create-drop', 'update', 'validate', ''
-			url = "jdbc:mysql//${host}:${port}"
+			url = "jdbc:mysql://${host}:${port}/default"
 			username = "admin"
 			password = "pass1"
 		}

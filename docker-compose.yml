@@ -1,12 +1,16 @@
 app:
   ports:
-    - 9090:8080/tcp
+    - 8080:8080/tcp
+    - 9090:9090/tcp
   log_driver: ''
   restart: always
   log_opt: {}
   links:
     - db
-  image: srik/grails-petclinic
+  image: srik/dev-image
+  volumes:
+    - ./grails-petclinic:/grails-petclinic
+    - ./grails-petclinic/.grails:/root/.grails/
   environment:
     DB_HOST: db:3306
     DB_PASSWORD: pass1
