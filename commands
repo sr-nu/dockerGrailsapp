@@ -1,4 +1,0 @@
-commands
-
-Steps if app server/entry point fails due to port restrictions
-need to Stop -> upgrade -> update port eg: from 80 to 8888 -> finish upgrade -> start

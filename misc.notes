@@ -1,0 +1,199 @@
+
+
+local rancher api key http://192.168.99.101:8080/
+API Key Created
+Access Key (Username)
+8CA7ADD035AE169580D5
+Secret Key (Password)
+K6msPB54pRKH3Hm4XK6K7MAmkvxgXEpJxwk6dLPg
+
+
+Polaris rancher - http://192.168.104.31:8080/
+
+API Key Created
+Access Key (Username)
+641986770A66FBE086C0
+Secret Key (Password)
+XgaU863NxKNn3uTmAVCCZjjqryVM9wHFUBFuY1hf
+
+
+Dev env Rancher  -  http://192.168.104.18:6060/
+
+Access Key (Username)
+C0AAE811CFB686B1E287
+Secret Key (Password)
+Zhahf2iNB3Vo2Q7xtMMZi9dvpfaxPVdGtR3nUhB6
+
+
+
+
+
+
+
+
+Host machine (svn checkout + ide) -> shared volumes(mount code + /root/.grails for grails wrapper) -> docker (build+runtime deps)
+
+       	|
+       	v
+
+commit code + Dockerfiles for images + docker-compose.yml + rancher-compose.yml   to Repo
+
+	   	|
+	   	v
+
+CI (build pipeline) builds war file and publishes (archives locally or to remote)
+
+		|
+		V
+
+CI (update image to docker registry) OR Registy pulls and autobuilds images like dockerhub
+[CI able to run docker build, docker push for building image]
+
+		|
+		V
+
+CI (publish to Rancher)
+CI executes rancher-compose to deploy updated images to rancher
+
+
+
+
+
+
+installing docker inside the vm
+https://pods.iplantcollaborative.org/wiki/display/HDFDE/Installing+VirtualBox,+Ubuntu,+and+Docker
+
+commands
+
+Steps if app server/entry point fails due to port restrictions
+need to Stop -> upgrade -> update port eg: from 80 to 8888 -> finish upgrade -> start
+
+
+
+
+
+
+build docker image:
+sudo docker build --no-cache=true -t srik/grails-petclinic .
+
+adding shared data volume between docker containers during run
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+docker run -d -P --name web -v /webapp training/webapp python app.py
+[docker - command
+run - run instruction
+-d - dameon mode
+-P - map all ports
+--name web - name the container for reference
+-v - mount the volume   [mount location]
+training/webapp- image name
+python aap.py - command to execute inside the container]
+
+
+adding host data folder as volume to a docker container
+
+$ docker run -d -P --name web -v /$(pwd)/host-folder:/docker-folder training/webapp python app.py
+
+[-v /$(pwd)/src/webapp:/opt/webapp   --    [host folder:destination folder as volume]]
+
+$ docker run -v /$(pwd)/grails-petclinic:/grails-petclinic/ -it srik/grails-petclinic bash
+
+or
+
+docker run -v /$(pwd)/grails-petclinic:/grails-petclinic/ -v /$(pwd)/grails-petclinic/.grails:/root/.grails/ -it srik/grails-petclinic bash
+
+BUILD IMAGE
+~~~~~~~~~~~
+sudo docker build --no-cache=true -t srik/grails-petclinic .
+eg: docker build -t srik/grails-petclinic .
+
+RUN IMAGE
+~~~~~~~~
+on windows/docker machine, can mount only c:/users by default
+$ docker run -v //c/Users/srikanth.nutigattu/test/grails-petclinic:/grails-petclinic -it srik/grails-petclinic bash
+
+on mac
+docker run -v /$(pwd)/grails-petclinic:/grails-petclinic -it srik/grails-petclinic bash
+
+
+
+
+
+docker machine
+~~~~~~~~~~~~~~
+create docker machine
+docker-machine create -d virtualbox default
+docker-machine create -d virtualbox --virtualbox-memory 4096 default
+
+delete docker machine
+docker-machine rm default
+
+
+
+
+docker inspect   <id>/<name>
+~~~~~~~~~~~~~~
+to view the configuration of a running container
+
+
++++++++++++++++++++++++++++++++++++++++
+
+attaching bash to existing container
+
+$ sudo docker exec -i -t 665b4a1e17b6 /bin/bash #by ID
+or
+$ sudo docker exec -i -t loving_heisenberg /bin/bash #by Name
+
+
+
+
+
++++++++++++++++++++++++++++++++++++++++
+
+
+jenkins
+
+starting jenkins from local and mounting a local volume for workspace
+
+docker run -d  --name myjenkins -p 6060:8080 -p 50000:50000 -v $(pwd)/jenkins_home:/var/jenkins_home jenkins
+
+
+
+++++++++++++++++++++++++++++++++++++++++
+
+
+
+RANCHER NOTES:
+#############
+
+publishing to RANCHER
+---------------------
+
+ ./rancher-compose --url http://192.168.99.102:8080 --access-key AE0E8DC8EF493A9B546E --secret-key 4T2nQpeo7JEqY3pLTk7aRg9dEbnQDB99iHv26jHG up
+
+
+Setting up a demo Rancher locally
+---------------------------------
+
+
+starting a rancher server agent locally:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+sudo docker run -d --restart=always -p 8080:8080 rancher/server
+#tail the logs
+sudo docker logs -f containerid
+
+
+starting a rancher Host machine locally
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. on rancher web UI go to Infra > hosts > add host.
+2. update the ip address to current "docker-machine ip" address
+3. copy the docker host script and execute in docker quickstart terminal
+
+
+Adding hosts in Rancher
+-----------------------
+
+update the ipaddress on the WebUI in add hosts screen. If using locally on docker-machine use docker machine-ip.
+copy the command from rancher Ui to run docker-agent on host....
+Run the command on Host machine.
+[you can add the same host where the rancher is running as well]

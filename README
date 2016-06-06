@@ -1,179 +1,134 @@
-local dev environment
+This is a demo project, it is based on the famous Spring Pet clinic, but customised to use Grails 2.x.
 
+The main objective of this project is to introduce Docker as part of Development lifecycle. [Later just introduces to deployment lifecycle]
 
 
-Host machine (svn checkout + ide) -> shared volumes(mount code + /root/.grails for grails wrapper) -> docker (build+runtime deps)
+Getting Started
+###############
 
-       	|
-       	v
 
-commit code + Dockerfiles for images + docker-compose.yml + rancher-compose.yml   to Repo
+1. Install the Pre-requisites
+    Download and install Docker Toolbox, Virtual box
 
-	   	|
-	   	v
+2. Start docker quick start terminal, to start docker machine, docker deamon etc
 
-CI (build pipeline) builds war file and publishes (archives locally or to remote)
+3. Verify docker machine status by running:
+   "$> docker-machine status"
 
-		|
-		V	   		
+4. Get docker-machine ip address by running:
+   "$> docker-machine ip"
 
-CI (update image to docker registry) OR Registy pulls and autobuilds images like dockerhub
-[CI able to run docker build, docker push for building image]
+5. Verify docker installation by running
+   $> docker run hello-world
+   After images get downloaded, you should see a message "Hello from Docker." along with other helpful details
 
-		|
-		V
+All set to go!!
 
-CI (publish to Rancher)
-CI executes rancher-compose to deploy updated images to rancher
 
-local dev:
-[optionally: vagrant -> ubuntu (svn checkout + code + build deps)]
+Project details
+###############
 
+Some important files:
 
+->  grails-petclinic
+        It is the actual application folder.
+      -/conf/DataSource.groovy
+            This file defines database strings. It uses environment variables to connect to DB
 
+-> Dockerfile
+        The file used to build the docker "Dev image".
+        It can be enhanced to include "build-time dependencies" like libraries/tools/frameworks softwares etc.
+        The image built is for development and testing.
 
-local rancher api key http://192.168.99.101:8080/
-API Key Created
-Access Key (Username)
-8CA7ADD035AE169580D5
-Secret Key (Password)
-K6msPB54pRKH3Hm4XK6K7MAmkvxgXEpJxwk6dLPg
+-> docker-compose.yml
+        It defines the environment necessary for running the required containers ie "app" and "db" for app to work.
+        you can simply start the entire environment by using:
+        "$> docker-compose up"
+        This file defines all the necessary configuration to start the containers with the application:
+        1. Exposing the ports 8080 tomcat, and 9090 standalone for run-app if required
+        2. Mounts the volumes from host
+        3. sets up links between app and db containers
+        4. provides the configuration necessary for db to run
+        5. "app" based on dev image built from docker file
 
+- README
+    This file :)
 
 
-Polaris rancher - http://192.168.104.31:8080/
+Running the Application
+#######################
 
-API Key Created  
-Access Key (Username)
-641986770A66FBE086C0 
-Secret Key (Password)
-XgaU863NxKNn3uTmAVCCZjjqryVM9wHFUBFuY1hf 
+1. Build the dev image
+   $> docker build -t srik/dev-image .
 
+2. Start the required environment using
+   $>  docker-compose up
 
-Dev env Rancher  -  http://192.168.104.18:6060/
+3. verify the containers that have been started
+   $> docker ps
+   two containers should have been started eg: app: dockergrailsapp_app_1, db: dockergrailsapp_db_1
 
-Access Key (Username)
-C0AAE811CFB686B1E287
-Secret Key (Password)
-Zhahf2iNB3Vo2Q7xtMMZi9dvpfaxPVdGtR3nUhB6
+4. verify tomcat is running from the app container
+    1. get the ip of docker-machine using "docker-machine ip"
+    2. open a browser and goto http://<docker machine ip got above>:8080
+        you should see familiar tomcat homepage.
 
+5. connect bash to the running app container
+    $> docker exec -it dockergrailsapp_app_1 bash
+    you should now inside the container
+        root@<containerid>:/
 
+6. go to the mounted application folder:
+    root@../> cd /grails-petclinic
 
-publishing to RANCHER
-~~~~~~~~~~~~~~~~~~~~~~
-srikanth.nutigattu@SGPC115 MINGW64 /d/projects/rancher_demo
-$ export RANCHER_URL=http://192.168.104.31:8080
+7. run the grails application directly on port 9090
+    grails-petclinic> ./grailsw -Dserver.port=9090 run-app
 
-srikanth.nutigattu@SGPC115 MINGW64 /d/projects/rancher_demo
-$ export RANCHER_ACCESS_KEY=641986770A66FBE086C0
+    on host chrome browser:
+    http://<docker machine ip got above>:9090/petclinic
 
-srikanth.nutigattu@SGPC115 MINGW64 /d/projects/rancher_demo
-$ export RANCHER_SECRET_KEY=XgaU863NxKNn3uTmAVCCZjjqryVM9wHFUBFuY1hf
+OR
 
+8. build a warfile and copy to the tomcat running on 8080
+    build war :  cd /grails-petclinic && dos2unix grailsw && ./grailsw war
+    copy war  :  cp /grails-petclinic/target/*.war /usr/local/tomcat/webapps/
 
- ./rancher-compose --url http://192.168.99.102:8080 --access-key AE0E8DC8EF493A9B546E --secret-key 4T2nQpeo7JEqY3pLTk7aRg9dEbnQDB99iHv26jHG up
+    on host chrome browser:
+    http://<docker machine ip got above>:8080/petclinic
 
+Enjoy!!! Go Docker!!!
 
 
----------------------------------
 
-starting a rancher server agent locally:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-sudo docker run -d --restart=always -p 8080:8080 rancher/server
-#tail the logs
-sudo docker logs -f containerid
 
 
-starting a rancher Host machine locally
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+OTHER USEFUL INSTRUCTIONS
+#########################
 
-1. on rancher web UI go to Infra > hosts > add host.
-2. update the ip address to current "docker-machine ip" address
-3. copy the docker host script and execute in docker quickstart terminal
 
-________________________________
+Create or Upadate Image from a running container
+------------------------------------------------
 
-installing docker inside the vm
-https://pods.iplantcollaborative.org/wiki/display/HDFDE/Installing+VirtualBox,+Ubuntu,+and+Docker
+Once you’ve completed those instructions you can disconnect, or detach, from the shell without exiting use the escape sequence Ctrl-p + Ctrl-q.
 
-commands
+Finally it’s time to commit our changes to a named image. This command converts the container 9c09acd48a25 to an image with the name fedora-base-with-git:
 
-Steps if app server/entry point fails due to port restrictions
-need to Stop -> upgrade -> update port eg: from 80 to 8888 -> finish upgrade -> start
+docker commit 9c09acd48a25 srik/app
 
 
-Adding hosts in Rancher
+PUBLISHING IMAGES TO DOCKER HUB
+###############################
 
-update the ipaddress on the WebUI in add hosts screen. If using locally on docker-machine use docker machine-ip. 
-copy the command from rancher Ui to run docker-agent on host....
-Run the command on Host machine.
-[you can add the same host where the rancher is running as well]
+docker login --username=srik --email=srikanth.nutigattu@gmail.com
+docker push srik/app
 
-build docker image:
-sudo docker build --no-cache=true -t srik/grails-petclinic .
 
-adding shared data volume between docker containers during run
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-docker run -d -P --name web -v /webapp training/webapp python app.py
-[docker - command
-run - run instruction
--d - dameon mode
--P - map all ports
---name web - name the container for reference
--v - mount the volume   [mount location]
-training/webapp- image name
-python aap.py - command to execute inside the container]
 
-
-adding host data folder as volume to a docker container
-
-$ docker run -d -P --name web -v /$(pwd)/host-folder:/docker-folder training/webapp python app.py
-
-[-v /$(pwd)/src/webapp:/opt/webapp   --    [host folder:destination folder as volume]]
-
-$ docker run -v /$(pwd)/grails-petclinic:/grails-petclinic/ -it srik/grails-petclinic bash
-
-or
-
-docker run -v /$(pwd)/grails-petclinic:/grails-petclinic/ -v /$(pwd)/grails-petclinic/.grails:/root/.grails/ -it srik/grails-petclinic bash
-
-BUILD IMAGE
-~~~~~~~~~~~
-sudo docker build --no-cache=true -t srik/grails-petclinic .
-eg: docker build -t srik/grails-petclinic .
-
-RUN IMAGE
-~~~~~~~~
-on windows/docker machine, can mount only c:/users by default
-$ docker run -v //c/Users/srikanth.nutigattu/test/grails-petclinic:/grails-petclinic -it srik/grails-petclinic bash
-
-on mac
-docker run -v /$(pwd)/grails-petclinic:/grails-petclinic -it srik/grails-petclinic bash
-
-
-
-
-
-docker machine
-~~~~~~~~~~~~~~
-create docker machine
-docker-machine create -d virtualbox default
-docker-machine create -d virtualbox --virtualbox-memory 4096 default
-
-delete docker machine
-docker-machine rm default
-
-
-
-
-docker inspect   <id>/<name>
-~~~~~~~~~~~~~~ 
-to view the configuration of a running container
-
-
+ADDITIONAL CONSIDERATIONS
+#########################
 
 ON WINDOWS
-~~~~~~~~~~
+----------
 VirtualBox Guest Additions
 
 Alternatively, Boot2Docker includes the VirtualBox Guest Additions built in for the express purpose of using VirtualBox folder sharing.
@@ -185,56 +140,17 @@ Users share at /Users
 c/Users share at /c/Users
 /c/Users share at /c/Users
 c:/Users share at /c/Users
-If some other path or share is desired, it can be mounted at run time by doing something like:
 
+
+
+If some other path or share is desired, it can be mounted at run time by doing something like:
+(From stackoverflow:)
 $ mount -t vboxsf -o uid=1000,gid=50 your-other-share-name /some/mount/location
 It is also important to note that in the future, the plan is to have any share which is created in VirtualBox with the "automount" flag turned on be mounted during boot at the directory of the share name (ie, a share named home/jsmith would be automounted at /home/jsmith).
-
 In case it isn't already clear, the Linux host support here is currently hazy. You can share your /home or /home/jsmith directory as Users or one of the other supported automount locations listed above, but note that you will then need to manually convert your docker run -v /home/...:... bind-mount host paths accordingly (ie, docker run -v /Users/...:...). As noted in the previous paragraph however, this is likely to change in the future as soon as a more suitable/scalable solution is found and implemented.
 
+Note:
 
-#############################################
-if mounting windows git checkout file to unix....
-
-either retain the unix line endings or
-use 
-dos2unix to convert
-
-apt-get install dos2unix
-dos2unix grailsw
-################################################
-
-
-commit chages to docker image
-
-Once you’ve completed those instructions you can disconnect, or detach, from the shell without exiting use the escape sequence Ctrl-p + Ctrl-q.
-
-Finally it’s time to commit our changes to a named image. This command converts the container 9c09acd48a25 to an image with the name fedora-base-with-git:
-
-docker commit 9c09acd48a25 fedora-base-with-git
-
-
-+++++++++++++++++++++++++++++++++++++++++++
-jenkins
-
-starting jenkins from local and mounting a local volume for workspace
-
-docker run -d  --name myjenkins -p 6060:8080 -p 50000:50000 -v $(pwd)/jenkins_home:/var/jenkins_home jenkins
-
-
-
-++++++++++++++++++++++++++++++++++++++++
-
-publishing images to docker hub
-
-docker login --username=srik --email=srikanth.nutigattu@gmail.com
-docker push srik/app
-
-
-+++++++++++++++++++++++++++++++++++++++
-
-attaching bash to existing container
-
-$ sudo docker exec -i -t 665b4a1e17b6 /bin/bash #by ID
-or
-$ sudo docker exec -i -t loving_heisenberg /bin/bash #by Name
+If mounting windows git checkout file to unix, either retain the unix line endings or use "dos2unix" to convert
+    $/> apt-get install dos2unix
+    $/> dos2unix grailsw
